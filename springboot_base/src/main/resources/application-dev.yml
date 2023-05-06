@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/springboot_base?serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    oolPreparedStatements: true
+
+
+        #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+        #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+        #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  devtools:
+    restart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 3MB
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.dong.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+photo:
+    uploadPhotoPath: D:/定做区/2019-2020年定做/java项目/码/基于SpringBoot+mybatis+mysql+redis的二手交易市场项目/second_hand_market/springboot_base/src/main/resources/upload/
+    #uploadPhotoPath: /home/xiaodong/upload/
+    uploadPhotoSuffix: .jpg,.png,.gif,.jpeg
+    uploadPhotoMaxSize: 2048
+
+title:
+    sysName: 广东理工学院
+    homeName: 广东理工二手街
+    menuTitle: 菜单列表
+    userTitle: 用户列表
+    roleTitle: 角色列表
+    logTitle: 日志列表
+    databaseTitle: 备份列表
+    categoryTitle: 分类列表
+    goodTitle: 物品列表
+    studentTitle: 学生列表
+    commentTitle: 评论列表
+    newsTitle: 新闻公告列表
+

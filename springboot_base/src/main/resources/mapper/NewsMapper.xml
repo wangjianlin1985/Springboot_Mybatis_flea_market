@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.NewsMapper">
+    <insert id="save" parameterType="News">
+        INSERT INTO news(title, content, view_number, create_time) VALUES (#{title},#{content},#{viewNumber},now())
+    </insert>
+
+    <select id="selectPage" resultType="News" >
+        SELECT * FROM news
+        <where>
+            <if test="title != null">
+                title LIKE concat('%',#{title},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectNewsById" resultType="News">
+        SELECT * FROM news WHERE id=#{id}
+    </select>
+
+    <update id="updateNews" parameterType="News">
+        UPDATE news
+        <set>
+        <if test="title != null">
+            title=#{title},
+        </if>
+        <if test="content != null">
+            content=#{content},
+        </if>
+        <if test="viewNumber != null">
+            view_number=#{viewNumber}
+        </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteNews">
+        DELETE FROM news WHERE id=#{id}
+    </delete>
+
+
+</mapper>

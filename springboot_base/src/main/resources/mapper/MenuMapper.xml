@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.MenuMapper">
+    <select id="selectAllMenu" resultType="Menu">
+     SELECT  * FROM menu
+    </select>
+
+    <select id="selectMenuByRole" resultType="Menu">
+        SELECT m.* FROM user u ,menu m,role_menu rm WHERE u.role=rm.role_id AND rm.menu_id=m.id AND u.role=#{id}
+    </select>
+
+    <insert id="save" parameterType="Menu">
+        INSERT INTO menu(create_time, name, url, icon,  parent, button, `show`) VALUES (NOW(),#{name},#{url},#{icon},#{parent},#{button},#{show})
+    </insert>
+
+    <select id="selectMenuById" parameterType="Integer" resultType="Menu">
+        SELECT * FROM menu WHERE id=#{id}
+    </select>
+
+    <delete id="deleteMenu" parameterType="Integer">
+        DELETE FROM menu WHERE  id=#{id}
+    </delete>
+
+    <update id="updateMenu" parameterType="Menu">
+        UPDATE menu SET name=#{name},url=#{url},icon=#{icon},parent=#{parent},button=#{button},`show`=#{show} WHERE id =#{id}
+    </update>
+</mapper>

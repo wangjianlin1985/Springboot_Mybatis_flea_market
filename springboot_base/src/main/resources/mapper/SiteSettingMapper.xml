@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.SiteSettingMapper">
+      <select id="selectSite" resultType="SiteSetting">
+          SELECT * FROM site_setting
+      </select>
+
+    <update id="updateSite" parameterType="SiteSetting">
+        UPDATE site_setting SET site_name=#{siteName},site_url=#{siteUrl},logo_1=#{logo1},logo_2=#{logo2},code=#{code},all_rights=#{allRights}
+    </update>
+</mapper>

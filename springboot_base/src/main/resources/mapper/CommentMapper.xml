@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.CommentMapper">
+    <resultMap id="StudentAndComment" type="com.dong.vo.CommentResult">
+        <id property="id" column="id"></id>
+        <result property="content" column="content"></result>
+        <result property="createTime" column="create_time"></result>
+        <association property="student" javaType="Student">
+            <result property="sno" column="sno"></result>
+            <result property="name" column="name"></result>
+            <result property="image" column="image"></result>
+        </association>
+        <association property="good" javaType="Good">
+            <result property="id" column="gid"></result>
+            <result property="name" column="gname"></result>
+            <result property="photo" column="photo"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectCommentByGid" resultMap="StudentAndComment">
+        select c.*,s.sno,s.name,s.image FROM comment c,student s WHERE c.student_id=s.id AND  good_id=#{gid}
+    </select>
+
+    <insert id="saveComment" parameterType="Comment">
+        INSERT INTO comment(content, student_id, good_id, create_time) VALUES (#{content},#{studentId},#{goodId},now())
+    </insert>
+
+    <select id="selectPage" resultMap="StudentAndComment">
+        SELECT co.*,s.sno,g.id gid,g.name gname,g.photo FROM  comment co,student s ,good g
+        <where>
+         co.student_id=s.id AND co.good_id=g.id
+            <if test="name !=null  ">
+              AND  g.name LIKE concat ('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteComment">
+        DELETE FROM comment WHERE id=#{id}
+    </delete>
+</mapper>

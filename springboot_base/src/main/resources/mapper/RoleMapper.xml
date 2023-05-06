@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.RoleMapper">
+    <select id="selectMenuByRole" resultType="Menu">
+        SELECT m.* FROM role_menu r,menu m where r.menu_id=m.id and r.role_id=#{id};
+    </select>
+
+    <select id="selectAllRole" resultType="Role">
+        select * from role
+    </select>
+
+    <select id="selectRoleById" resultType="Role">
+        SELECT * FROM role WHERE id=#{id}
+    </select>
+
+    <select id="selectMenuIdById" resultType="Integer">
+        SELECT role_menu.menu_id FROM role_menu WHERE role_id=#{id}
+    </select>
+
+    <insert id="saveRole" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role(name, remark, create_time) VALUES (#{name},#{remark},now())
+    </insert>
+
+    <insert id="saveRoleAndMenuId">
+        INSERT INTO role_menu VALUES (#{id},#{menuId})
+    </insert>
+
+    <update id="updateRole" parameterType="Role" >
+        UPDATE role
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="remark != null">
+                remark=#{remark}
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteRole">
+        DELETE FROM role WHERE id=#{id}
+    </delete>
+
+    <delete id="deleteMenuId">
+        DELETE FROM role_menu WHERE role_id=#{id}
+    </delete>
+
+
+
+</mapper>

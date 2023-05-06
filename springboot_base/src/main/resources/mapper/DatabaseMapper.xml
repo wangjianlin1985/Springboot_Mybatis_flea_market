@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.DatabaseMapper">
+    <select id="selectAll" resultType="Database">
+       SELECT * FROM database_back
+    </select>
+
+    <insert id="saveDatabase" parameterType="Database">
+        INSERT INTO database_back(name, path, create_time) VALUES (#{name},#{path},now())
+    </insert>
+
+    <delete id="deleteDatabase">
+        DELETE FROM database_back WHERE id=#{id}
+    </delete>
+</mapper>

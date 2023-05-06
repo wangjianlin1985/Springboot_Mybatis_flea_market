@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dong.mapper.GoodMapper">
+
+    <resultMap id="GoodAndStudent" type="com.dong.vo.GoodResult">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="describle" column="describle"></result>
+        <result property="price" column="price"></result>
+        <result property="photo" column="photo"></result>
+        <result property="status" column="status"></result>
+        <result property="viewNumber" column="view_number"></result>
+        <result property="createTime" column="create_time"></result>
+        <association property="student" javaType="Student">
+            <result property="sno" column="sno"></result>
+            <result property="name" column="sname"></result>
+            <result property="wx" column="wx"></result>
+            <result property="mobile" column="mobile"></result>
+            <result property="image" column="image"></result>
+            <result property="school" column="school"></result>
+            <result property="academy" column="academy"></result>
+            <result property="grade" column="grade"></result>
+        </association>
+        <association property="category" javaType="Category">
+            <result property="name" column="cname"></result>
+        </association>
+
+    </resultMap>
+
+
+
+    <select id="selectGoodsBySid" resultType="Good">
+    SELECT * FROM good WHERE student_id=#{sid}
+    </select>
+
+    <select id="selectDetailGood" resultMap="GoodAndStudent">
+        SELECT s.sno,s.name sname,s.wx,s.mobile,s.image,s.school,s.academy,s.grade, g.* FROM student s ,good g WHERE g.student_id=s.id AND g.id=#{id}
+    </select>
+
+    <select id="selectPage" resultMap="GoodAndStudent">
+        SELECT s.school,s.academy,g.* FROM student s,good g
+        <where>
+            g.student_id=s.id AND  g.status=1
+            <if test="name!= null and name != ''">
+              AND  g.name LIKE concat ('%',#{name},'%')
+            </if>
+        </where>
+        ORDER BY g.create_time DESC
+    </select>
+
+    <select id="selectPages" resultMap="GoodAndStudent">
+        SELECT cate.name cname,s.name sname,s.sno,g.* FROM student s,good g,category cate
+        <where>
+            g.student_id=s.id AND g.category_id=cate.id
+            <if test="name!= null and name != ''">
+                AND  g.name LIKE concat ('%',#{name},'%')
+            </if>
+        </where>
+        ORDER BY g.create_time DESC
+    </select>
+
+    <select id="selectGoodByStatus" resultType="int">
+        SELECT  count(*) FROM good WHERE status=#{status}
+    </select>
+
+    <select id="selectList" resultMap="GoodAndStudent">
+        SELECT s.school,s.academy,g.* FROM student s,good g
+        <where>
+            g.student_id=s.id AND g.status=1 AND g.category_id=#{cid}
+        </where>
+        ORDER BY g.create_time DESC
+    </select>
+
+    <select id="countGoodBySid" resultType="Integer">
+    SELECT count(*) FROM good WHERE student_id=#{sid}
+    </select>
+    <select id="selectGoodById" resultType="Good">
+        SELECT * FROM good WHERE id=#{id}
+    </select>
+
+    <update id="updateGood" parameterType="Good">
+        UPDATE good
+        <set>
+            <if test="name != null ">
+                name=#{name},
+            </if>
+            <if test="describle != null">
+                describle=#{describle},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="photo != null">
+                photo=#{photo},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="categoryId != null">
+                category_id=#{categoryId},
+            </if>
+            <if test="viewNumber != null">
+                view_number=#{viewNumber}
+            </if>
+        </set>
+          WHERE id=#{id}
+    </update>
+
+    <insert id="saveGood" parameterType="Good">
+        INSERT INTO good(name, describle, price, photo, category_id, student_id, create_time) VALUES (#{name},#{describle},#{price},#{photo},#{categoryId},#{studentId},now())
+    </insert>
+
+    <delete id="deleteGood">
+        DELETE FROM good WHERE id=#{id}
+    </delete>
+</mapper>
